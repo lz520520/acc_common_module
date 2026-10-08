@@ -18,21 +18,12 @@ pub type AccModules = HashMap<u64, Arc<dyn AgentModule>>;
 
 pub const MODULE_ABI_VERSION: u32 = 2;
 
-pub fn module_build_id() -> u64 {
-    env!("ACC_MODULE_BUILD_ID").parse().unwrap()
-}
-
 #[macro_export]
 macro_rules! export_agent_module_abi {
     () => {
         #[no_mangle]
         pub extern "C" fn AccModuleAbiVersion() -> u32 {
             agent_module_trait::MODULE_ABI_VERSION
-        }
-
-        #[no_mangle]
-        pub extern "C" fn AccModuleBuildId() -> u64 {
-            agent_module_trait::module_build_id()
         }
     };
 }
