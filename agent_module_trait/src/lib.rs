@@ -16,7 +16,7 @@ pub static RAW_ERROR: Lazy<String> = Lazy::new(|| obfstr::obfstring!("raw_error"
 
 pub type AccModules = HashMap<u64, Arc<dyn AgentModule>>;
 
-pub const MODULE_ABI_VERSION: u32 = 3;
+pub const MODULE_ABI_VERSION: u32 = 2;
 
 #[macro_export]
 macro_rules! export_agent_module_abi {
