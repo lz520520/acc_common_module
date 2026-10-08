@@ -32,6 +32,7 @@ impl TaskWorkers {
         if !state.accepting {
             return false;
         }
+        state.handles.retain(|handle| !handle.is_finished());
         state.handles.push(thread::spawn(work));
         true
     }
@@ -86,6 +87,21 @@ mod tests {
         assert!(!workers.spawn(|| {}));
         assert!(!workers.wait_stopped(Instant::now() + Duration::from_millis(20)));
         gate.wait();
+        assert!(workers.wait_stopped(Instant::now() + Duration::from_secs(1)));
+    }
+
+    #[test]
+    fn completed_workers_are_reaped_before_new_spawn() {
+        let workers = TaskWorkers::default();
+        assert!(workers.spawn(|| {}));
+        let deadline = Instant::now() + Duration::from_secs(1);
+        while !workers.state.lock().unwrap().handles[0].is_finished() {
+            assert!(Instant::now() < deadline);
+            thread::yield_now();
+        }
+        assert!(workers.spawn(|| {}));
+        assert_eq!(workers.state.lock().unwrap().handles.len(), 1);
+        workers.stop_accepting();
         assert!(workers.wait_stopped(Instant::now() + Duration::from_secs(1)));
     }
 }
