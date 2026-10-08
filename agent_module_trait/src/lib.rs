@@ -16,7 +16,7 @@ pub static RAW_ERROR: Lazy<String> = Lazy::new(|| obfstr::obfstring!("raw_error"
 
 pub type AccModules = HashMap<u64, Arc<dyn AgentModule>>;
 
-pub const MODULE_ABI_VERSION: u32 = 2;
+pub const MODULE_ABI_VERSION: u32 = 3;
 
 #[macro_export]
 macro_rules! export_agent_module_abi {
@@ -55,8 +55,18 @@ pub struct AgentModuleParams {
 }
 
 pub struct TaskRequest {
-    pub header: TaskHeader,
+    pub header: Arc<dyn AgentModuleInput>,
     pub input: Arc<dyn AgentModuleInput>,
+}
+
+impl TaskRequest {
+    pub fn status(&self) -> AgentModuleResult<TaskStatus> {
+        let value: u8 = self
+            .header
+            .required_u64(obfstr::obfstr!("task_status"))?
+            .try_into()?;
+        Ok(value.try_into()?)
+    }
 }
 
 impl std::ops::Deref for TaskRequest {
@@ -72,25 +82,6 @@ impl std::ops::Deref for AgentModuleParams {
 
     fn deref(&self) -> &Self::Target {
         &self.request
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct TaskHeader {
-    pub task_id: u64,
-    pub task_type: u64,
-    pub sub_task_type: u64,
-    pub status: TaskStatus,
-}
-
-impl Default for TaskHeader {
-    fn default() -> Self {
-        Self {
-            task_id: 0,
-            task_type: 0,
-            sub_task_type: 0,
-            status: TaskStatus::TaskStart,
-        }
     }
 }
 
