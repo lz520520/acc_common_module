@@ -7,7 +7,8 @@ use crate::{AgentModuleResult, AgentModuleTask, ParamMeta, StopReason, TaskReque
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::ffi::{c_char, c_int, c_void};
-use std::sync::atomic::{AtomicU32, AtomicU64, AtomicUsize, Ordering};
+use portable_atomic::AtomicU64;
+use std::sync::atomic::{AtomicU32, AtomicUsize, Ordering};
 use std::sync::{Arc, Mutex, OnceLock};
 use std::time::{Duration, Instant};
 
