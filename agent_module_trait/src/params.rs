@@ -1,6 +1,6 @@
 use crate::ParamMeta;
 
-#[derive(Clone)]
+#[derive(Clone, serde::Serialize, serde::Deserialize)]
 pub enum ParamValue {
     ParamList(Vec<ParamMeta>),
     Params(ParamMeta),
@@ -18,9 +18,8 @@ pub enum ParamValue {
     Int16(i16),
     Int8(i8),
     // Int(isize),
-
     Float64(f64),
-    Float32(f32)
+    Float32(f32),
 }
 
 macro_rules! impl_from_param_value {

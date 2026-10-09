@@ -1,4 +1,6 @@
 mod helper_macro;
+#[cfg(target_os = "linux")]
+pub mod linux_bridge;
 pub mod params;
 mod task_workers;
 
@@ -200,6 +202,11 @@ pub trait AgentModuleInput: Send + Sync {
 
     fn get_iter_param(&self, key: &str) -> Box<dyn AgentModuleInput>;
     fn get_iter_list_param(&self, key: &str) -> Vec<Box<dyn AgentModuleInput>>;
+
+    /// Complete dynamic parameter snapshot for transports between runtimes.
+    fn snapshot(&self) -> ParamMeta {
+        ParamMeta::new()
+    }
 }
 
 pub trait AgentModuleInfo: Send + Sync {
