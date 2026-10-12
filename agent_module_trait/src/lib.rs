@@ -264,7 +264,14 @@ pub trait AgentModule: Send + Sync {
 
 pub trait AgentModuleTask: Send + Sync {
     fn run(self: Arc<Self>, params: AgentModuleParams) -> AgentModuleResult<()>;
-    fn request_stop(&self, _reason: StopReason) -> AgentModuleResult<()> {
+    fn request_stop(&self, reason: StopReason) -> AgentModuleResult<()> {
+        if reason == StopReason::Remote {
+            return Err(std::io::Error::new(
+                std::io::ErrorKind::Unsupported,
+                obfstr::obfstring!("task did not handle the stop request"),
+            )
+            .into());
+        }
         Ok(())
     }
     fn wait_stopped(&self, _deadline: Instant) -> AgentModuleResult<bool> {
