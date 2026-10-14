@@ -7,10 +7,6 @@ name = "acc_common_module"
 version = "0.1.0"
 
 [[package]]
-name = "agent_module_abi"
-version = "0.1.0"
-
-[[package]]
 name = "agent_module_macro"
 version = "0.1.0"
 dependencies = [

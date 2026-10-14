@@ -1,6 +1,0 @@
-[package]
-name = "agent_module_abi"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]

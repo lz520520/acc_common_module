@@ -1,4 +1,4 @@
-workspace = { members = ["agent_module_abi", "agent_module_macro", "agent_module_trait"] }
+workspace = { members = ["agent_module_macro", "agent_module_trait"] }
 [package]
 name = "acc_common_module"
 version = "0.1.0"

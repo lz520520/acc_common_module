@@ -1,9 +1,9 @@
 mod helper_macro;
-#[cfg(target_os = "linux")]
-pub mod linux_bridge;
+mod owned_input;
 pub mod params;
 mod task_workers;
 
+pub use owned_input::OwnedInput;
 pub use task_workers::TaskWorkers;
 
 use crate::params::ParamValue;
