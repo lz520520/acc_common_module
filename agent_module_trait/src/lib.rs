@@ -24,7 +24,7 @@ pub const MODULE_ABI_VERSION: u32 = 2;
 macro_rules! export_agent_module_abi {
     () => {
         #[no_mangle]
-        pub extern "C" fn AccModuleAbiVersion() -> u32 {
+        pub extern "C" fn ModuleVersion() -> u32 {
             agent_module_trait::MODULE_ABI_VERSION
         }
     };
