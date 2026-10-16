@@ -18,7 +18,7 @@ pub static RAW_ERROR: Lazy<String> = Lazy::new(|| obfstr::obfstring!("raw_error"
 
 pub type AccModules = HashMap<u64, Arc<dyn AgentModule>>;
 
-pub const MODULE_ABI_VERSION: u32 = 2;
+pub const MODULE_ABI_VERSION: u32 = 3;
 
 #[macro_export]
 macro_rules! export_agent_module_abi {
@@ -239,7 +239,10 @@ pub trait AgentModuleOutput: Send + Sync {
     fn log_warning(&self, msg: &str);
 
     fn log_data(&self, data: Vec<u8>);
-    fn log_big_data(&self, data: Vec<u8>);
+    /// Stage a regular file and queue it for Big Data transfer. The file must
+    /// remain readable until this call returns. A successful return means the
+    /// Agent accepted the staged transport, not that TeamServer imported it.
+    fn log_big_data(&self, path: &str) -> AgentModuleResult<()>;
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
